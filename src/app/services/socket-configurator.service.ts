@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, combineLatest, Subject } from 'rxjs';
+import { SocketFactoryService } from './socket-factory.service';
 
 @Injectable({
     providedIn: 'root'
@@ -12,7 +13,12 @@ export class SocketConfiguratorService {
     readonly timerObservable = this.timerSubject.asObservable();
     readonly arraySizeObservable = this.arraySizeSubject.asObservable();
 
-    constructor() { }
+    constructor(private socketFactory: SocketFactoryService) {
+        combineLatest([this.timerObservable, this.arraySizeObservable])
+        .subscribe(([timer, arraySize]) => {
+            this.socketFactory.createSocket(timer, arraySize, this.idListSubject.getValue());
+        })
+    }
 
     setTimerValue(timerInterval: number): void {
         this.timerSubject.next(timerInterval);
