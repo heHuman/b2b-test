@@ -1,0 +1,14 @@
+<div class="container">
+    <div class="input-field">
+        <label for="timer">Timer, ms</label>
+        <input id="timer" type="number" min="0" (change)="onTimerValueChanged($event)">
+    </div>
+    <div class="input-field">
+        <label for="array-size">Array size</label>
+        <input id="array-size" type="number" min="1" (change)="onArraySizeChanged($event)">
+    </div>
+    <div class="input-field large">
+        <label for="id-list">Additional array ids</label>
+        <input id="id-list" type="text" (change)="onIdListChanged($event)">
+    </div>
+</div>

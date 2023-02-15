@@ -1,0 +1,32 @@
+.container {
+    display: flex;
+    justify-content: space-evenly;
+    column-gap: 5%;
+
+    padding: 2%;
+}
+
+.input-field {
+    display: flex;
+    flex-direction: column;
+
+    row-gap: 1em;
+
+    width: 20%;
+
+    input {
+        height: 1.5em;
+    }
+
+    label {
+        align-self: center;
+    }
+
+    &.large {
+        width: 40%;
+
+        label {
+            align-self: flex-start;
+        }
+    }
+}
