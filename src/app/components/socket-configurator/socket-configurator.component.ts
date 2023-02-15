@@ -41,10 +41,12 @@ export class SocketConfiguratorComponent implements AfterViewInit, OnDestroy {
     }
 
     onTimerValueChanged(newValue: string): void {
+        if (!newValue) return;
         this.socketConfiguratorService.setTimerValue(Number(newValue));
     }
 
     onArraySizeChanged(newArraySize: string): void {
+        if (!newArraySize) return;
         this.socketConfiguratorService.setArraySize(Number(newArraySize));
     }
 

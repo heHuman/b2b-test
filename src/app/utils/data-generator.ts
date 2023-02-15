@@ -5,7 +5,6 @@ function generateRandomColor(): string {
 }
 
 export class DataGenerator {
-
     public static generateDataArray(arraySize: number, specificIds?: string[]): ArrayDataItem[] {
         const resArray: ArrayDataItem[] = Array(arraySize).fill(DataGenerator.generateDataItem());
 
@@ -18,7 +17,7 @@ export class DataGenerator {
         return resArray;
     }
 
-    public static generateDataItem(): ArrayDataItem {
+    private static generateDataItem(): ArrayDataItem {
         return {
             id: '1',
             int: 31253295,
