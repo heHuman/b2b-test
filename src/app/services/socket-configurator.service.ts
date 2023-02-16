@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, combineLatest, Subject } from 'rxjs';
-import { SocketFactoryService } from './socket-factory.service';
+import { WorkerFactoryService } from './worker-factory.service';
 
 @Injectable({
     providedIn: 'root'
@@ -13,10 +13,11 @@ export class SocketConfiguratorService {
     readonly timerObservable = this.timerSubject.asObservable();
     readonly arraySizeObservable = this.arraySizeSubject.asObservable();
 
-    constructor(private socketFactory: SocketFactoryService) {
+    constructor(private workerFactory: WorkerFactoryService) {
         combineLatest([this.timerObservable, this.arraySizeObservable])
-        .subscribe(([timer, arraySize]) => {
-            this.socketFactory.createSocket(timer, arraySize, this.idListSubject.getValue());
+        .subscribe(([interval, arraySize]) => {
+            const worker = this.workerFactory.createWorker(interval, arraySize, this.idListSubject.getValue());
+            worker.postMessage({ interval, arraySize });
         })
     }
 
