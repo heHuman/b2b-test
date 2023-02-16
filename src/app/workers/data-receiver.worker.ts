@@ -1,14 +1,13 @@
 /// <reference lib="webworker" />
 
-import { ArrayDataItem } from '../model/array-item';
+import { DataItem } from '../model/array-item';
+import { parseData } from '../utils/parse-data';
 import { PseudoSocket } from '../utils/pseudo-socket';
 
 let socketInstance: PseudoSocket;
 
-function parseData(data: string) {
-    const dataArray: ArrayDataItem[] = JSON.parse(data);
-    const lastTenElements = dataArray.length <= 10 ? dataArray : dataArray.slice(-10);
-    postMessage({ lastTenElements });
+function sendDataToMainThread(data: DataItem[]): void {
+    postMessage({ lastTenElements: data });
 }
 
 addEventListener('message', ({ data }) => {
@@ -16,5 +15,7 @@ addEventListener('message', ({ data }) => {
         socketInstance.close();
     }
     socketInstance = new PseudoSocket(data.interval, data.arraySize);
-    socketInstance.addEventListener('message', parseData);
+    socketInstance.addEventListener('message', (encodedData: string) => {
+        sendDataToMainThread(parseData(encodedData));
+    });
 });
