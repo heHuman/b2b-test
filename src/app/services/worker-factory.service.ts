@@ -13,7 +13,7 @@ export class WorkerFactoryService {
             this.workerStore.instance;
         }
 
-        const worker = new Worker('../workers/data-receiver.worker.ts');
+        const worker = new Worker(new URL('../workers/data-receiver.worker', import.meta.url), { type: 'module' });
 
         this.workerStore.instance = worker;
         return worker;
