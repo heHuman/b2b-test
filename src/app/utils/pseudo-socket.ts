@@ -1,7 +1,7 @@
-import { DataGenerator } from "../utils/data-generator";
-import { ArrayDataItem } from "./array-item";
+import { DataGenerator } from "./data-generator";
+import { ArrayDataItem } from "../model/array-item";
 
-export type Listener = (param: {data: ArrayDataItem[]}) => void;
+export type Listener = (data: string) => void;
 
 export class PseudoSocket {
     private eventListeners: {[key: string]: Listener} = {};
@@ -25,7 +25,8 @@ export class PseudoSocket {
 
     private fireEvent(eventName: string, param: {data: ArrayDataItem[]}): void {
         if (this.eventListeners[eventName]) {
-            this.eventListeners[eventName](param);
+            // stringify to emulate simplest format of actual data
+            this.eventListeners[eventName](JSON.stringify(param.data));
         }
     }
 }
