@@ -8,9 +8,9 @@ export class WorkerFactoryService {
 
     constructor(private workerStore: WorkerStoreService) { }
 
-    createWorker(timer: number, arraySize: number, idList: string[]): Worker {
+    createWorker(): Worker {
         if (this.workerStore.hasInstance()) {
-            this.workerStore.instance;
+            return this.workerStore.instance;
         }
 
         const worker = new Worker(new URL('../workers/data-receiver.worker', import.meta.url), { type: 'module' });

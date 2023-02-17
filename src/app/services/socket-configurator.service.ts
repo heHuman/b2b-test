@@ -20,12 +20,12 @@ export class SocketConfiguratorService implements OnDestroy {
         private workerFactory: WorkerFactoryService,
         private workerMessaging: WorkerMessagingService
     ) {
-        combineLatest([this.timerObservable, this.arraySizeObservable])
+        combineLatest([this.timerObservable, this.arraySizeObservable, this.idListSubject])
         .pipe(takeUntil(this.destroyed$))
-        .subscribe(([interval, arraySize]) => {
-            const worker = this.workerFactory.createWorker(interval, arraySize, this.idListSubject.getValue());
+        .subscribe(([interval, arraySize, idList]) => {
+            const worker = this.workerFactory.createWorker();
             this.workerMessaging.subscribeToWorker(worker);
-            this.workerMessaging.sendMessageToWorker(worker, { interval, arraySize });
+            this.workerMessaging.sendMessageToWorker(worker, { interval, arraySize, idList });
         })
     }
 
