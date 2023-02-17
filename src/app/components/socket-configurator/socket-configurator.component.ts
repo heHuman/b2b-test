@@ -49,7 +49,7 @@ export class SocketConfiguratorComponent implements AfterViewInit, OnDestroy {
     }
 
     onIdListChanged(idList: string): void {
-        const newIdList = idList?.split(',') ?? [];
+        const newIdList = idList?.split(',').map(id => id.trim()).filter(id => id.length > 0) ?? [];
         this.socketConfiguratorService.setIdList(newIdList);
     }
 }
