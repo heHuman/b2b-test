@@ -1,6 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, combineLatest, Subject, takeUntil } from 'rxjs';
 import { WorkerFactoryService } from './worker-factory.service';
+import { WorkerMessagingService } from './worker-messaging.service';
 
 @Injectable({
     providedIn: 'root'
@@ -15,15 +16,16 @@ export class SocketConfiguratorService implements OnDestroy {
     readonly timerObservable = this.timerSubject.asObservable();
     readonly arraySizeObservable = this.arraySizeSubject.asObservable();
 
-    constructor(private workerFactory: WorkerFactoryService) {
+    constructor(
+        private workerFactory: WorkerFactoryService,
+        private workerMessaging: WorkerMessagingService
+    ) {
         combineLatest([this.timerObservable, this.arraySizeObservable])
         .pipe(takeUntil(this.destroyed$))
         .subscribe(([interval, arraySize]) => {
             const worker = this.workerFactory.createWorker(interval, arraySize, this.idListSubject.getValue());
-            worker.postMessage({ interval, arraySize });
-            worker.onmessage = (ev) => {
-                console.log(ev.data);
-            }
+            this.workerMessaging.subscribeToWorker(worker);
+            this.workerMessaging.sendMessageToWorker(worker, { interval, arraySize });
         })
     }
 

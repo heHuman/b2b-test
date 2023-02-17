@@ -7,7 +7,7 @@ import { PseudoSocket } from '../utils/pseudo-socket';
 let socketInstance: PseudoSocket;
 
 function sendDataToMainThread(data: DataItem[]): void {
-    postMessage({ lastTenElements: data });
+    postMessage(data);
 }
 
 addEventListener('message', ({ data }) => {

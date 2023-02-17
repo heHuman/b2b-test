@@ -14,9 +14,7 @@ export class SocketConfiguratorComponent implements AfterViewInit, OnDestroy {
 
     private destroyed$ = new Subject<void>();
 
-    constructor(
-        private socketConfiguratorService: SocketConfiguratorService
-    ) { }
+    constructor(private socketConfiguratorService: SocketConfiguratorService) { }
 
     ngAfterViewInit(): void {
         this.subscribeToInputs();
@@ -33,7 +31,7 @@ export class SocketConfiguratorComponent implements AfterViewInit, OnDestroy {
             takeUntil(this.destroyed$),
             debounceTime(500)
         )
-        .subscribe(res => handlerMethod((res.target as HTMLInputElement).value));
+        .subscribe(event => handlerMethod((event.target as HTMLInputElement).value));
     }
 
     ngOnDestroy(): void {

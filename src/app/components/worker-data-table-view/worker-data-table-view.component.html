@@ -1,0 +1,38 @@
+<table>
+    <tr>
+        <th *ngFor="let column of columnsToDisplay">
+            {{ column }}
+        </th>
+    </tr>
+    <tr class="data-row" *ngFor="let item of dataSource">
+        <td *ngFor="let simpleTextColumn of simpleTextColumns">
+            {{ item[simpleTextColumn] }}
+        </td>
+        <ng-container *ngTemplateOutlet="colorTemplate; context: { data: item.color }"></ng-container>
+        <ng-container *ngTemplateOutlet="childTemplate; context: { data: item.child }"></ng-container>
+    </tr>
+</table>
+
+
+<ng-template #colorTemplate let-data="data">
+    <td [style.background-color]="data"> {{data}} </td>
+</ng-template>
+
+<ng-template #childTemplate let-data="data">
+    <table>
+        <tr>
+            <th>
+                id
+            </th>
+            <th>
+                color
+            </th>
+        </tr>
+        <tr>
+            <td>
+                {{ data.id }}
+            </td>
+            <ng-container *ngTemplateOutlet="colorTemplate; context: { data: data.color }"></ng-container>
+        </tr>
+    </table>
+</ng-template>

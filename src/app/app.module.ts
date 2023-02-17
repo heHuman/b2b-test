@@ -1,22 +1,24 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { MatTableModule } from '@angular/material/table';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SocketConfiguratorComponent } from './components/socket-configurator/socket-configurator.component';
-import { TableViewComponent } from './components/table-view/table-view.component';
+import { WorkerDataTableViewComponent } from './components/worker-data-table-view/worker-data-table-view.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    SocketConfiguratorComponent,
-    TableViewComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+        SocketConfiguratorComponent,
+        WorkerDataTableViewComponent
+    ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        MatTableModule
+    ],
+    providers: [],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }
