@@ -1,16 +1,23 @@
 import { ArrayDataItem } from "../model/array-item";
 
-function generateRandomColor(): string {
-    return Math.floor(Math.random()*16777215).toString(16);
-}
+function generateRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
 
 export class DataGenerator {
     public static generateDataArray(arraySize: number, specificIds?: string[]): ArrayDataItem[] {
         const resArray: ArrayDataItem[] = Array(arraySize).fill(DataGenerator.generateDataItem());
 
-        if (specificIds) {
-            for (let i = 0; i < specificIds.length; ++i) {
-                resArray[resArray.length - 10 + i].id = specificIds[i];
+        const minDisplayedIndex = arraySize <= 10 ? 0 : arraySize - 10;
+        for (let i = 0; minDisplayedIndex + i < arraySize; ++i) {
+            resArray[minDisplayedIndex + i] = this.generateDataItem();
+            if (specificIds && specificIds.length > i) {
+                resArray[minDisplayedIndex + i].id = specificIds[i];
             }
         }
 
@@ -19,9 +26,9 @@ export class DataGenerator {
 
     private static generateDataItem(): ArrayDataItem {
         return {
-            id: '1',
-            int: 31253295,
-            float: 12.123215121515,
+            id: Math.floor(Math.random() * 1000000).toString(),
+            int: Math.floor(Math.random() * 1000000),
+            float: +(Math.random() * 35).toFixed(18),
             color: generateRandomColor(),
             child: {
                 id: 'child-id',

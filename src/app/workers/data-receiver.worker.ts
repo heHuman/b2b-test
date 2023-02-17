@@ -12,10 +12,11 @@ function sendDataToMainThread(data: DataItem[]): void {
 
 addEventListener('message', ({ data }) => {
     if (socketInstance) {
-        socketInstance.close();
+        socketInstance.close()
     }
-    socketInstance = new PseudoSocket(data.interval, data.arraySize);
+    socketInstance = new PseudoSocket(data.interval, data.arraySize, data.idList);
     socketInstance.addEventListener('message', (encodedData: string) => {
         sendDataToMainThread(parseData(encodedData));
     });
+    socketInstance.open();
 });

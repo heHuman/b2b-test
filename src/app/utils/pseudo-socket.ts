@@ -8,8 +8,12 @@ export class PseudoSocket {
 
     // TODO: need to clean it up somehow
     private intervalId!: number;
+    private arraySize: number;
+    private idList: string[];
 
     constructor(intervalMs: number, arraySize: number, idList?: string[]) {
+        this.arraySize = arraySize;
+        this.idList = idList ?? [];
         this.intervalId = setInterval(() => {
             this.fireEvent('message', { data: DataGenerator.generateDataArray(arraySize, idList) });
         }, intervalMs) as unknown as number;
@@ -17,6 +21,10 @@ export class PseudoSocket {
 
     addEventListener(eventName: string, listener: Listener): void {
         this.eventListeners[eventName] = listener;
+    }
+
+    open() {
+        this.fireEvent('message', { data: DataGenerator.generateDataArray(this.arraySize, this.idList) });
     }
 
     close() {
