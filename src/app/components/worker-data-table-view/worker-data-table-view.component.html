@@ -5,11 +5,13 @@
         </th>
     </tr>
     <tr class="data-row" *ngFor="let item of dataSource | async">
-        <td *ngFor="let simpleTextColumn of simpleTextColumns">
+        <td class="simple-text-cell" *ngFor="let simpleTextColumn of simpleTextColumns">
             {{ item[simpleTextColumn] }}
         </td>
         <ng-container *ngTemplateOutlet="colorTemplate; context: { data: item.color }"></ng-container>
-        <ng-container *ngTemplateOutlet="childTemplate; context: { data: item.child }"></ng-container>
+        <td>
+            <ng-container *ngTemplateOutlet="childTemplate; context: { data: item.child }"></ng-container>
+        </td>
     </tr>
 </table>
 
@@ -19,7 +21,7 @@
 </ng-template>
 
 <ng-template #childTemplate let-data="data">
-    <table>
+    <table class="child-table">
         <tr>
             <th>
                 id
