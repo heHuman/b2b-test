@@ -4,7 +4,7 @@ import { SocketConfiguratorService } from 'src/app/services/socket-configurator.
 
 import { SocketConfiguratorComponent } from './socket-configurator.component';
 
-fdescribe('SocketConfiguratorComponent', () => {
+describe('SocketConfiguratorComponent', () => {
     let component: SocketConfiguratorComponent;
     let fixture: ComponentFixture<SocketConfiguratorComponent>;
     let configuratorServiceSpy: SocketConfiguratorService;

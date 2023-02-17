@@ -15,7 +15,7 @@ class StoreMock {
     }
 }
 
-fdescribe('WorkerFactoryService', () => {
+describe('WorkerFactoryService', () => {
     let factoryService: WorkerFactoryService;
 
     beforeEach(() => {

@@ -1,7 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { MatTableModule } from '@angular/material/table';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SocketConfiguratorComponent } from './components/socket-configurator/socket-configurator.component';
@@ -15,8 +13,7 @@ import { WorkerDataTableViewComponent } from './components/worker-data-table-vie
     ],
     imports: [
         BrowserModule,
-        AppRoutingModule,
-        MatTableModule
+        AppRoutingModule
     ],
     providers: [],
     bootstrap: [AppComponent]

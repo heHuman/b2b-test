@@ -10,8 +10,17 @@ function generateRandomColor() {
   }
 
 export class DataGenerator {
-    public static generateDataArray(arraySize: number, specificIds?: string[]): ArrayDataItem[] {
-        const resArray: ArrayDataItem[] = Array(arraySize).fill(DataGenerator.generateDataItem());
+    private generatedData: ArrayDataItem[] = [];
+
+    public generateDataArray(arraySize: number, specificIds?: string[]): ArrayDataItem[] {
+        let resArray: ArrayDataItem[];
+
+        if (this.generatedData.length && this.generatedData.length >= arraySize) {
+            resArray = this.generatedData.slice(0, arraySize);
+        } else {
+            resArray = Array(arraySize).fill(this.generateDataItem());
+            this.generatedData = resArray;
+        }
 
         const minDisplayedIndex = arraySize <= 10 ? 0 : arraySize - 10;
         for (let i = 0; minDisplayedIndex + i < arraySize; ++i) {
@@ -24,7 +33,7 @@ export class DataGenerator {
         return resArray;
     }
 
-    private static generateDataItem(): ArrayDataItem {
+    private generateDataItem(): ArrayDataItem {
         return {
             id: Math.floor(Math.random() * 1000000).toString(),
             int: Math.floor(Math.random() * 1000000),

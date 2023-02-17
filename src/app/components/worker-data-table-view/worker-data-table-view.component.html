@@ -4,7 +4,7 @@
             {{ column }}
         </th>
     </tr>
-    <tr class="data-row" *ngFor="let item of dataSource">
+    <tr class="data-row" *ngFor="let item of dataSource | async">
         <td *ngFor="let simpleTextColumn of simpleTextColumns">
             {{ item[simpleTextColumn] }}
         </td>

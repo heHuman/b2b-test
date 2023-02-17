@@ -1,5 +1,5 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { Subject } from 'rxjs';
 import { DataItem } from 'src/app/model/array-item';
 import { WorkerMessagingService } from 'src/app/services/worker-messaging.service';
 
@@ -8,10 +8,11 @@ type DataItemKey = keyof DataItem;
     selector: 'app-worker-data-table-view',
     templateUrl: './worker-data-table-view.component.html',
     styleUrls: ['./worker-data-table-view.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WorkerDataTableViewComponent implements OnInit, OnDestroy {
 
-    public dataSource: DataItem[] = [];
+    public dataSource = this.workerMessagingService.messagesFromWorker;
     public columnsToDisplay: string[] = ['id', 'int', 'float', 'color', 'child'];
     public simpleTextColumns: DataItemKey[] = ['id', 'int', 'float'];
 
@@ -22,12 +23,6 @@ export class WorkerDataTableViewComponent implements OnInit, OnDestroy {
     ) { }
 
     ngOnInit(): void {
-        this.workerMessagingService.messagesFromWorker.pipe(
-            takeUntil(this.destroyed$)
-        )
-        .subscribe(data => {
-            this.dataSource = data;
-        });
     }
 
     ngOnDestroy(): void {
