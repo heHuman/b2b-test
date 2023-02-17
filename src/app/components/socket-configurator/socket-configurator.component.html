@@ -1,14 +1,20 @@
-<div class="container">
+<form [formGroup]="formGroup" class="container">
     <div class="input-field">
         <label for="timer">Timer, ms</label>
-        <input #timerInput id="timer" type="number" min="0">
+        <input #timerInput formControlName="timer" id="timer" type="number" [ngClass]="{ 'invalid': formGroup.controls['timer'].invalid }">
+        <div *ngIf="formGroup.controls['timer'].invalid" class="alert">
+            Required, only positive numbers allowed
+        </div>
     </div>
     <div class="input-field">
         <label for="array-size">Array size</label>
-        <input #arraySizeInput id="array-size" type="number" min="1">
+        <input #arraySizeInput formControlName="arraySize" id="array-size" type="number" [ngClass]="{ 'invalid': formGroup.controls['arraySize'].invalid }">
+        <div *ngIf="formGroup.controls['arraySize'].invalid" class="alert">
+            Required, only positive numbers allowed
+        </div>
     </div>
     <div class="input-field large">
         <label for="id-list">Additional array ids</label>
-        <input #idListInput id="id-list" type="text">
+        <input #idListInput formControlName="idList" id="id-list" type="text">
     </div>
-</div>
+</form>

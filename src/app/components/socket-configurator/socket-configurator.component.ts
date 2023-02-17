@@ -1,5 +1,6 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
-import { debounceTime, fromEvent, Subject, takeUntil } from 'rxjs';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { debounceTime, fromEvent, Observable, Subject, takeUntil, tap, throwError } from 'rxjs';
 import { SocketConfiguratorService } from 'src/app/services/socket-configurator.service';
 
 @Component({
@@ -7,31 +8,50 @@ import { SocketConfiguratorService } from 'src/app/services/socket-configurator.
     templateUrl: './socket-configurator.component.html',
     styleUrls: ['./socket-configurator.component.scss']
 })
-export class SocketConfiguratorComponent implements AfterViewInit, OnDestroy {
+export class SocketConfiguratorComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild('timerInput') timerInput!: ElementRef<HTMLInputElement>;
     @ViewChild('arraySizeInput') arraySizeInput!: ElementRef<HTMLInputElement>;
     @ViewChild('idListInput') idListInput!: ElementRef<HTMLInputElement>;
 
+    public formGroup!: FormGroup;
+
     private destroyed$ = new Subject<void>();
 
-    constructor(private socketConfiguratorService: SocketConfiguratorService) { }
+    constructor(
+        private socketConfiguratorService: SocketConfiguratorService,
+        private formBuilder: FormBuilder
+    ) { }
+
+    ngOnInit(): void {
+        this.formGroup = this.formBuilder.group({
+            timer: this.formBuilder.control(null, [Validators.required, Validators.pattern("^[0-9]*$")]),
+            arraySize: this.formBuilder.control(null, [Validators.required, Validators.pattern("^[0-9]*$")]),
+            idList: this.formBuilder.control(null)
+        });
+    }
 
     ngAfterViewInit(): void {
         this.subscribeToInputs();
     }
 
     private subscribeToInputs(): void {
-        this.subscribeToInputWithMethod(this.timerInput.nativeElement, this.onTimerValueChanged.bind(this));
-        this.subscribeToInputWithMethod(this.arraySizeInput.nativeElement, this.onArraySizeChanged.bind(this));
-        this.subscribeToInputWithMethod(this.idListInput.nativeElement, this.onIdListChanged.bind(this));
+        this.subscribeToChangesWithDebounce(this.formGroup.get('timer')!.valueChanges)
+            .subscribe(val => this.onTimerValueChanged(val));
+        this.subscribeToChangesWithDebounce(this.formGroup.get('arraySize')!.valueChanges)
+            .subscribe(val => this.onArraySizeChanged(val));
+        this.subscribeToChangesWithDebounce(this.formGroup.get('idList')!.valueChanges)
+            .subscribe(val => this.onIdListChanged(val));
     }
 
-    private subscribeToInputWithMethod(input: HTMLInputElement, handlerMethod: (param: string) => void): void {
-        fromEvent(input, 'keyup').pipe(
+    private subscribeToChangesWithDebounce(observable: Observable<any>): Observable<any> {
+        return observable.pipe(
             takeUntil(this.destroyed$),
-            debounceTime(500)
-        )
-        .subscribe(event => handlerMethod((event.target as HTMLInputElement).value));
+            debounceTime(350),
+            tap(_ => {
+                this.formGroup.markAllAsTouched();
+                if (!this.formGroup.valid) throwError(() => {});
+            })
+        );
     }
 
     ngOnDestroy(): void {
